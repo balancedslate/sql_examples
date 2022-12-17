@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HTTP Request Example</title>
+</head>
+<body>
+  <button id="button">Make Request</button>
+  <div id="response"></div>
+  <script>
+    document.getElementById('button').addEventListener('click', function() {
+      makeRequest('GET', 'https://example.com')
+        .then(function(response) {
+          document.getElementById('response').innerHTML = response;
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
+    });
+
+    function makeRequest(method, url) {
+      return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.onload = function() {
+          if (this.status >= 200 && this.status < 300) {
+            resolve(xhr.response);
+          } else {
+            reject({
+              status: this.status,
+              statusText: xhr.statusText
+            });
+          }
+        };
+        xhr.onerror = function() {
+          reject({
+            status: this.status,
+            statusText: xhr.statusText
+          });
+        };
+        xhr.send();
+      });
+    }
+  </script>
+</body>
+</html>
